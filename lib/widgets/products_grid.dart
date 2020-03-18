@@ -5,10 +5,8 @@ import '../widgets/product_item.dart';
 import '../providers/products.dart';
 
 class ProductsGrid extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
-
     final productsData = Provider.of<Products>(context);
     final products = productsData.items;
 
@@ -22,10 +20,11 @@ class ProductsGrid extends StatelessWidget {
         mainAxisSpacing: 10,
       ),
       itemBuilder: (ctx, index) {
-        return ProductItem(
-          products[index].id,
-          products[index].title,
-          products[index].imageUrl,
+        return ChangeNotifierProvider(
+          create: (ctx) => products[index],
+          child: ProductItem(
+          
+          ),
         );
       },
     );
