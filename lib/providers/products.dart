@@ -8,33 +8,33 @@ class Products with ChangeNotifier {
       id: 'p1',
       title: 'Red Shirt',
       description: 'A red shirt - it is pretty red!',
-      price: 299,
+      price: 599,
       imageUrl:
-          'https://cdn.pixabay.com/photo/2016/10/02/22/17/red-t-shirt-1710578_1280.jpg',
+          'https://i1.wp.com/www.stylzzz.com/wp-content/uploads/2018/06/1-2.jpg?fit=800%2C800&ssl=1',
     ),
     Product(
       id: 'p2',
       title: 'Trousers',
       description: 'A nice pair of trousers.',
-      price: 499,
+      price: 1299,
       imageUrl:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Trousers%2C_dress_%28AM_1960.022-8%29.jpg/512px-Trousers%2C_dress_%28AM_1960.022-8%29.jpg',
+          'https://rukminim1.flixcart.com/image/832/832/trouser/z/9/a/hltr003779-black-highlander-34-original-imaejr3ycfyjmxns.jpeg?q=70',
     ),
     Product(
       id: 'p3',
       title: 'Yellow Scarf',
       description: 'Warm and cozy - exactly what you need for the winter.',
-      price: 249,
+      price: 899,
       imageUrl:
-          'https://live.staticflickr.com/4043/4438260868_cc79b3369d_z.jpg',
+          'https://assets.ajio.com/medias/sys_master/root/hfb/h26/13541996101662/-1117Wx1400H-441002413-mustard-MODEL.jpg',
     ),
     Product(
       id: 'p4',
-      title: 'A Pan',
-      description: 'Prepare any meal you want.',
-      price: 599,
+      title: 'Adidas Running Shoes',
+      description: 'Shoes that will make you run faster than you think',
+      price: 1999,
       imageUrl:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
+          'https://assets.myntassets.com/dpr_2,q_60,w_210,c_limit,fl_progressive/assets/images/10393993/2019/9/18/d16ffa3f-3ba1-4977-99d0-8c24025cbcd81568810675943-ADIDAS-Men-Black-Hyperon-10-Running-Shoes-3411568810674699-1.jpg',
     ),
   ];
 
