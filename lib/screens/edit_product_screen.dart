@@ -27,10 +27,39 @@ class _EditProductScreenState extends State<EditProductScreen> {
     imageUrl: '',
   );
 
+  var _initValues = {
+    'title': '',
+    'description': '',
+    'price': '',
+    'imageUrl': '',
+  };
+
+  var _isInit = true;
+
   @override
   void initState() {
     _imageUrlFocusNode.addListener(_updateImageUrl);
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      final productId = ModalRoute.of(context).settings.arguments as String;
+      if (productId != null) {
+        _editedProduct =
+            Provider.of<Products>(context, listen: false).findById(productId);
+        _initValues = {
+          'title': _editedProduct.title,
+          'description': _editedProduct.description,
+          'price': _editedProduct.price.toString(),
+          'imageUrl': '',
+        };
+        _imageUrlController.text = _editedProduct.imageUrl;
+      }
+    }
+    _isInit = false;
+    super.didChangeDependencies();
   }
 
   @override
@@ -51,12 +80,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   void _saveForm() {
     final isValid = _form.currentState.validate();
-    if(!isValid) {
+    if (!isValid) {
       return;
     }
     _form.currentState.save();
-   Provider.of<Products>(context, listen: false).addProducts(_editedProduct);
-   Navigator.of(context).pop();
+
+    if (_editedProduct.id != null) {
+      Provider.of<Products>(context, listen: false)
+          .updateProduct(_editedProduct.id, _editedProduct);
+    } else {
+      Provider.of<Products>(context, listen: false).addProducts(_editedProduct);
+    }
+    Navigator.of(context).pop();
   }
 
   @override
@@ -78,6 +113,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
           child: ListView(
             children: <Widget>[
               TextFormField(
+                initialValue: _initValues['title'],
                 decoration: InputDecoration(
                   labelText: 'Title',
                 ),
@@ -86,14 +122,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   FocusScope.of(context).requestFocus(_priceFocusNode);
                 },
                 validator: (value) {
-                  if(value.isEmpty) {
+                  if (value.isEmpty) {
                     return 'Please provide a Title';
                   }
                   return null;
                 },
                 onSaved: (value) => {
                   _editedProduct = Product(
-                    id: null,
+                    id: _editedProduct.id,
+                    isFavorite: _editedProduct.isFavorite,
                     title: value,
                     description: _editedProduct.description,
                     price: _editedProduct.price,
@@ -102,6 +139,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 },
               ),
               TextFormField(
+                initialValue: _initValues['price'],
                 decoration: InputDecoration(
                   labelText: 'Price',
                 ),
@@ -112,20 +150,21 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   FocusScope.of(context).requestFocus(_descFocusNode);
                 },
                 validator: (value) {
-                  if(value.isEmpty) {
+                  if (value.isEmpty) {
                     return 'Enter Amount';
                   }
-                  if(double.tryParse(value) == null) {
+                  if (double.tryParse(value) == null) {
                     return 'Please enter a valid number';
                   }
-                  if(double.parse(value) <= 0) {
+                  if (double.parse(value) <= 0) {
                     return 'Please Enter Amount greater than 0';
                   }
                   return null;
                 },
                 onSaved: (value) => {
                   _editedProduct = Product(
-                    id: null,
+                    id: _editedProduct.id,
+                    isFavorite: _editedProduct.isFavorite,
                     title: _editedProduct.title,
                     description: _editedProduct.description,
                     price: double.parse(value),
@@ -134,6 +173,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 },
               ),
               TextFormField(
+                initialValue: _initValues['description'],
                 decoration: InputDecoration(
                   labelText: 'Description',
                 ),
@@ -141,17 +181,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 keyboardType: TextInputType.multiline,
                 focusNode: _descFocusNode,
                 validator: (value) {
-                  if(value.isEmpty) {
+                  if (value.isEmpty) {
                     return 'Please Enter a Description';
                   }
-                  if(value.length < 10) {
+                  if (value.length < 10) {
                     return 'Description should be atleast 10 characters';
                   }
                   return null;
                 },
                 onSaved: (value) => {
                   _editedProduct = Product(
-                    id: null,
+                    id: _editedProduct.id,
+                    isFavorite: _editedProduct.isFavorite,
                     title: _editedProduct.title,
                     description: value,
                     price: _editedProduct.price,
@@ -194,17 +235,21 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         if (value.isEmpty) {
                           return 'Please Enter URL';
                         }
-                        if(!value.startsWith('http') && !value.startsWith('https')) {
+                        if (!value.startsWith('http') &&
+                            !value.startsWith('https')) {
                           return 'Please Enter a valid URL';
                         }
-                        if(!value.endsWith('.png') && !value.endsWith('.jpg') && !value.endsWith('.jpeg')) {
-                          return 'Please Enter a valid URL';
-                        }
+                        // if (!value.endsWith('.png') &&
+                        //     !value.endsWith('.jpg') &&
+                        //     !value.endsWith('.jpeg')) {
+                        //   return 'Please Enter a valid URL';
+                        // }
                         return null;
                       },
                       onSaved: (value) => {
                         _editedProduct = Product(
-                          id: null,
+                          id: _editedProduct.id,
+                          isFavorite: _editedProduct.isFavorite,
                           title: _editedProduct.title,
                           description: _editedProduct.description,
                           price: _editedProduct.price,
