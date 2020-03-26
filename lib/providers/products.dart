@@ -51,7 +51,7 @@ class Products with ChangeNotifier {
     return _items.where((prodItem) => prodItem.isFavorite).toList();
   }
 
-  Product findById(String productId){
+  Product findById(String productId) {
     return _items.firstWhere((prod) => prod.id == productId);
   }
 
@@ -65,8 +65,15 @@ class Products with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  void addProducts(){
-    // _items.add(value);
+  void addProducts(Product product) {
+    final newProduct = Product(
+      id: DateTime.now().toString(),
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      imageUrl: product.imageUrl,
+    );
+    _items.add(newProduct);
     notifyListeners();
   }
 }

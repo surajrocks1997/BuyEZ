@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 import '../providers/product.dart';
+import '../providers/products.dart';
 
 class EditProductScreen extends StatefulWidget {
   static const routeName = '/edit-product';
@@ -53,10 +55,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
       return;
     }
     _form.currentState.save();
-    print(_editedProduct.title);
-    print(_editedProduct.description);
-    print(_editedProduct.price);
-    print(_editedProduct.imageUrl);
+   Provider.of<Products>(context, listen: false).addProducts(_editedProduct);
+   Navigator.of(context).pop();
   }
 
   @override
@@ -111,6 +111,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 onFieldSubmitted: (value) {
                   FocusScope.of(context).requestFocus(_descFocusNode);
                 },
+                validator: (value) {
+                  if(value.isEmpty) {
+                    return 'Enter Amount';
+                  }
+                  if(double.tryParse(value) == null) {
+                    return 'Please enter a valid number';
+                  }
+                  if(double.parse(value) <= 0) {
+                    return 'Please Enter Amount greater than 0';
+                  }
+                  return null;
+                },
                 onSaved: (value) => {
                   _editedProduct = Product(
                     id: null,
@@ -128,6 +140,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 maxLines: 3,
                 keyboardType: TextInputType.multiline,
                 focusNode: _descFocusNode,
+                validator: (value) {
+                  if(value.isEmpty) {
+                    return 'Please Enter a Description';
+                  }
+                  if(value.length < 10) {
+                    return 'Description should be atleast 10 characters';
+                  }
+                  return null;
+                },
                 onSaved: (value) => {
                   _editedProduct = Product(
                     id: null,
@@ -169,6 +190,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       controller: _imageUrlController,
                       focusNode: _imageUrlFocusNode,
                       onFieldSubmitted: (value) => _saveForm(),
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please Enter URL';
+                        }
+                        if(!value.startsWith('http') && !value.startsWith('https')) {
+                          return 'Please Enter a valid URL';
+                        }
+                        if(!value.endsWith('.png') && !value.endsWith('.jpg') && !value.endsWith('.jpeg')) {
+                          return 'Please Enter a valid URL';
+                        }
+                        return null;
+                      },
                       onSaved: (value) => {
                         _editedProduct = Product(
                           id: null,
