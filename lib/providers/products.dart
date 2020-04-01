@@ -7,7 +7,7 @@ import '../models/http_exception.dart';
 import './product.dart';
 
 class Products with ChangeNotifier {
-  List<Product> _items = [
+  List<Product> itemss = [
     // Product(
     //   id: 'p1',
     //   title: 'Red Shirt',
@@ -43,20 +43,23 @@ class Products with ChangeNotifier {
   ];
 
   // var _showFavoritesOnly = false;
+  final String authToken;
+
+  Products({this.authToken, this.itemss});
 
   List<Product> get items {
     // if(_showFavoritesOnly){
     //   return _items.where((prodItem) => prodItem.isFavorite).toList();
     // }
-    return [..._items];
+    return [...itemss];
   }
 
   List<Product> get favoriteItems {
-    return _items.where((prodItem) => prodItem.isFavorite).toList();
+    return itemss.where((prodItem) => prodItem.isFavorite).toList();
   }
 
   Product findById(String productId) {
-    return _items.firstWhere((prod) => prod.id == productId);
+    return itemss.firstWhere((prod) => prod.id == productId);
   }
 
   // void showFavoritesOnly() {
@@ -70,7 +73,7 @@ class Products with ChangeNotifier {
   // }
 
   Future<void> fetchAndSetProduct() async {
-    const url = 'https://buy-ez-flutter.firebaseio.com/products.json';
+    final url = 'https://buy-ez-flutter.firebaseio.com/products.json?auth=$authToken';
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -90,7 +93,7 @@ class Products with ChangeNotifier {
           isFavorite: prodData['isFavorite'],
         ));
       });
-      _items = loadedProducts;
+      itemss = loadedProducts;
       notifyListeners();
     } catch (error) {
       throw error;
@@ -98,7 +101,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> addProducts(Product product) async {
-    const url = 'https://buy-ez-flutter.firebaseio.com/products.json';
+    final url = 'https://buy-ez-flutter.firebaseio.com/products.json?auth=$authToken';
 
     try {
       final response = await http.post(
@@ -118,7 +121,7 @@ class Products with ChangeNotifier {
         price: product.price,
         imageUrl: product.imageUrl,
       );
-      _items.add(newProduct);
+      itemss.add(newProduct);
       notifyListeners();
     } catch (error) {
       throw error;
@@ -126,9 +129,9 @@ class Products with ChangeNotifier {
   }
 
   Future<void> updateProduct(String id, Product newProduct) async {
-    final prodIndex = _items.indexWhere((prod) => prod.id == id);
+    final prodIndex = itemss.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
-      final url = 'https://buy-ez-flutter.firebaseio.com/products/$id.json';
+      final url = 'https://buy-ez-flutter.firebaseio.com/products/$id.json?auth=$authToken';
       await http.patch(
         url,
         body: json.encode({
@@ -138,7 +141,7 @@ class Products with ChangeNotifier {
           'price': newProduct.price,
         }),
       );
-      _items[prodIndex] = newProduct;
+      itemss[prodIndex] = newProduct;
       notifyListeners();
     } else {
       print('...');
@@ -146,17 +149,17 @@ class Products with ChangeNotifier {
   }
 
   Future<void> deleteProducts(String id) async {
-    final url = 'https://buy-ez-flutter.firebaseio.com/products/$id.json';
-    final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
-    var existingProduct = _items[existingProductIndex];
+    final url = 'https://buy-ez-flutter.firebaseio.com/products/$id.json?auth=$authToken';
+    final existingProductIndex = itemss.indexWhere((prod) => prod.id == id);
+    var existingProduct = itemss[existingProductIndex];
 
-    _items.removeAt(existingProductIndex);
+    itemss.removeAt(existingProductIndex);
     notifyListeners();
 
     final response = await http.delete(url);
 
     if (response.statusCode >= 400) {
-      _items.insert(existingProductIndex, existingProduct);
+      itemss.insert(existingProductIndex, existingProduct);
       notifyListeners();
       throw HttpException('Could not delete Product');
     }

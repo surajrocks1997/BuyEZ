@@ -20,14 +20,17 @@ class OrderItem {
 }
 
 class Orders with ChangeNotifier {
-  List<OrderItem> _orders = [];
+  List<OrderItem> orderss = [];
+  final String authToken;
+
+  Orders({this.authToken, this.orderss});
 
   List<OrderItem> get orders {
-    return [..._orders];
+    return [...orderss];
   }
 
   Future<void> fetchAndSetOrder() async {
-    const url = 'https://buy-ez-flutter.firebaseio.com/orders.json';
+    final url = 'https://buy-ez-flutter.firebaseio.com/orders.json?auth=$authToken';
     final response = await http.get(url);
     final List<OrderItem> loadedOrders = [];
     final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -51,12 +54,12 @@ class Orders with ChangeNotifier {
         dateTime: DateTime.parse(orderedData['dateTime']),
       ));
     });
-    _orders = loadedOrders.reversed.toList();
+    orderss = loadedOrders.reversed.toList();
     notifyListeners();
   }
 
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
-    const url = 'https://buy-ez-flutter.firebaseio.com/orders.json';
+    final url = 'https://buy-ez-flutter.firebaseio.com/orders.json?auth=$authToken';
     final timestamp = DateTime.now();
     final response = await http.post(
       url,
@@ -74,7 +77,7 @@ class Orders with ChangeNotifier {
       }),
     );
 
-    _orders.insert(
+    orderss.insert(
       0,
       OrderItem(
         id: json.decode(response.body)['name'],
