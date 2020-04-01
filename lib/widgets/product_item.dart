@@ -11,7 +11,7 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
-    final authData = Provider.of<Auth>(context, listen: false); 
+    final authData = Provider.of<Auth>(context, listen: false);
     final scaffold = Scaffold.of(context);
 
     return ClipRRect(
@@ -38,7 +38,10 @@ class ProductItem extends StatelessWidget {
               onPressed: () async {
                 try {
                   await Provider.of<Product>(context, listen: false)
-                      .toggleFavoriteStatus(authData.token);
+                      .toggleFavoriteStatus(
+                    authData.token,
+                    authData.userId,
+                  );
                 } catch (error) {
                   scaffold.showSnackBar(
                     SnackBar(
