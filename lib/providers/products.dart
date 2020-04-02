@@ -7,7 +7,7 @@ import '../models/http_exception.dart';
 import './product.dart';
 
 class Products with ChangeNotifier {
-  List<Product> itemss = [
+  List<Product> _items = [
     // Product(
     //   id: 'p1',
     //   title: 'Red Shirt',
@@ -46,21 +46,21 @@ class Products with ChangeNotifier {
   final String authToken;
   final String userId;
 
-  Products({this.authToken, this.itemss, this.userId});
+  Products(this.authToken, this._items, this.userId);
 
   List<Product> get items {
     // if(_showFavoritesOnly){
     //   return _items.where((prodItem) => prodItem.isFavorite).toList();
     // }
-    return [...itemss];
+    return [..._items];
   }
 
   List<Product> get favoriteItems {
-    return itemss.where((prodItem) => prodItem.isFavorite).toList();
+    return _items.where((prodItem) => prodItem.isFavorite).toList();
   }
 
   Product findById(String productId) {
-    return itemss.firstWhere((prod) => prod.id == productId);
+    return _items.firstWhere((prod) => prod.id == productId);
   }
 
   // void showFavoritesOnly() {
@@ -103,7 +103,7 @@ class Products with ChangeNotifier {
               favoriteData == null ? false : favoriteData[prodId] ?? false,
         ));
       });
-      itemss = loadedProducts;
+      _items = loadedProducts;
       notifyListeners();
     } catch (error) {
       throw error;
@@ -132,7 +132,7 @@ class Products with ChangeNotifier {
         price: product.price,
         imageUrl: product.imageUrl,
       );
-      itemss.add(newProduct);
+      _items.add(newProduct);
       notifyListeners();
     } catch (error) {
       throw error;
@@ -140,7 +140,7 @@ class Products with ChangeNotifier {
   }
 
   Future<void> updateProduct(String id, Product newProduct) async {
-    final prodIndex = itemss.indexWhere((prod) => prod.id == id);
+    final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
       final url =
           'https://buy-ez-flutter.firebaseio.com/products/$id.json?auth=$authToken';
@@ -153,7 +153,7 @@ class Products with ChangeNotifier {
           'price': newProduct.price,
         }),
       );
-      itemss[prodIndex] = newProduct;
+      _items[prodIndex] = newProduct;
       notifyListeners();
     } else {
       print('...');
@@ -163,16 +163,16 @@ class Products with ChangeNotifier {
   Future<void> deleteProducts(String id) async {
     final url =
         'https://buy-ez-flutter.firebaseio.com/products/$id.json?auth=$authToken';
-    final existingProductIndex = itemss.indexWhere((prod) => prod.id == id);
-    var existingProduct = itemss[existingProductIndex];
+    final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
+    var existingProduct = _items[existingProductIndex];
 
-    itemss.removeAt(existingProductIndex);
+    _items.removeAt(existingProductIndex);
     notifyListeners();
 
     final response = await http.delete(url);
 
     if (response.statusCode >= 400) {
-      itemss.insert(existingProductIndex, existingProduct);
+      _items.insert(existingProductIndex, existingProduct);
       notifyListeners();
       throw HttpException('Could not delete Product');
     }

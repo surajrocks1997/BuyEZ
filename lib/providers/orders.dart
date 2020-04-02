@@ -20,14 +20,14 @@ class OrderItem {
 }
 
 class Orders with ChangeNotifier {
-  List<OrderItem> orderss = [];
+  List<OrderItem> _orders = [];
   final String authToken;
   final String userId;
 
-  Orders({this.authToken, this.orderss, this.userId});
+  Orders(this.authToken, this._orders, this.userId);
 
   List<OrderItem> get orders {
-    return [...orderss];
+    return [..._orders];
   }
 
   Future<void> fetchAndSetOrder() async {
@@ -56,7 +56,7 @@ class Orders with ChangeNotifier {
         dateTime: DateTime.parse(orderedData['dateTime']),
       ));
     });
-    orderss = loadedOrders.reversed.toList();
+    _orders = loadedOrders.reversed.toList();
     notifyListeners();
   }
 
@@ -82,7 +82,7 @@ class Orders with ChangeNotifier {
         }),
       );
 
-      orderss.insert(
+      _orders.insert(
         0,
         OrderItem(
           id: json.decode(response.body)['name'],
