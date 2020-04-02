@@ -22,20 +22,22 @@ class OrderItem {
 class Orders with ChangeNotifier {
   List<OrderItem> orderss = [];
   final String authToken;
+  final String userId;
 
-  Orders({this.authToken, this.orderss});
+  Orders({this.authToken, this.orderss, this.userId});
 
   List<OrderItem> get orders {
     return [...orderss];
   }
 
   Future<void> fetchAndSetOrder() async {
-    final url = 'https://buy-ez-flutter.firebaseio.com/orders.json?auth=$authToken';
+    final url =
+        'https://buy-ez-flutter.firebaseio.com/orders/$userId.json?auth=$authToken';
     final response = await http.get(url);
     final List<OrderItem> loadedOrders = [];
     final extractedData = json.decode(response.body) as Map<String, dynamic>;
 
-    if(extractedData == null) {
+    if (extractedData == null) {
       return;
     }
 
@@ -59,33 +61,39 @@ class Orders with ChangeNotifier {
   }
 
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
-    final url = 'https://buy-ez-flutter.firebaseio.com/orders.json?auth=$authToken';
+    final url =
+        'https://buy-ez-flutter.firebaseio.com/orders/$userId.json?auth=$authToken';
     final timestamp = DateTime.now();
-    final response = await http.post(
-      url,
-      body: json.encode({
-        'amount': total,
-        'dateTime': timestamp.toIso8601String(),
-        'products': cartProducts
-            .map((cartProduct) => {
-                  'id': cartProduct.id,
-                  'title': cartProduct.title,
-                  'quantity': cartProduct.quantity,
-                  'price': cartProduct.price,
-                })
-            .toList(),
-      }),
-    );
 
-    orderss.insert(
-      0,
-      OrderItem(
-        id: json.decode(response.body)['name'],
-        amount: total,
-        products: cartProducts,
-        dateTime: timestamp,
-      ),
-    );
-    notifyListeners();
+    try {
+      final response = await http.post(
+        url,
+        body: json.encode({
+          'amount': total,
+          'dateTime': timestamp.toIso8601String(),
+          'products': cartProducts
+              .map((cartProduct) => {
+                    'id': cartProduct.id,
+                    'title': cartProduct.title,
+                    'quantity': cartProduct.quantity,
+                    'price': cartProduct.price,
+                  })
+              .toList(),
+        }),
+      );
+
+      orderss.insert(
+        0,
+        OrderItem(
+          id: json.decode(response.body)['name'],
+          amount: total,
+          products: cartProducts,
+          dateTime: timestamp,
+        ),
+      );
+      notifyListeners();
+    } catch (error) {
+      throw error;
+    }
   }
 }
