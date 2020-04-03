@@ -30,7 +30,7 @@ class Orders with ChangeNotifier {
     return [..._orders];
   }
 
-  Future<void> fetchAndSetOrder() async {
+  Future<List<OrderItem>> fetchAndSetOrder() async {
     final url =
         'https://buy-ez-flutter.firebaseio.com/orders/$userId.json?auth=$authToken';
     final response = await http.get(url);
@@ -38,7 +38,7 @@ class Orders with ChangeNotifier {
     final extractedData = json.decode(response.body) as Map<String, dynamic>;
 
     if (extractedData == null) {
-      return;
+      return null;
     }
 
     extractedData.forEach((orderId, orderedData) {
@@ -59,6 +59,8 @@ class Orders with ChangeNotifier {
     });
     _orders = loadedOrders.reversed.toList();
     notifyListeners();
+    return orders;
+    
   }
 
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
