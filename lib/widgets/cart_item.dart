@@ -9,8 +9,10 @@ class CartItem extends StatelessWidget {
   final double price;
   final int quantity;
   final String title;
+  final String imageUrl;
 
-  CartItem(this.id, this.productId, this.price, this.quantity, this.title);
+  CartItem(this.id, this.productId, this.price, this.quantity, this.title,
+      this.imageUrl);
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +28,13 @@ class CartItem extends StatelessWidget {
             actions: <Widget>[
               FlatButton(
                 onPressed: () {
-                  Navigator.of(ctx).pop(false); 
+                  Navigator.of(ctx).pop(false);
                 },
                 child: Text('No'),
               ),
               FlatButton(
                 onPressed: () {
-                  Navigator.of(ctx).pop(true); 
+                  Navigator.of(ctx).pop(true);
                 },
                 child: Text('Yes'),
               ),
@@ -65,10 +67,11 @@ class CartItem extends StatelessWidget {
           vertical: 4,
         ),
         child: Padding(
-          padding: EdgeInsets.all(12),
+          padding: EdgeInsets.only(right: 12),
           child: ListTile(
             leading: CircleAvatar(
-              child: FittedBox(child: Text('INR $price')),
+              backgroundImage: NetworkImage(imageUrl),
+              radius: 40,
             ),
             title: Text('$title'),
             subtitle: Text('Total: INR ${(price * quantity)}'),

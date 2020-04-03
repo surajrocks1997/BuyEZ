@@ -51,6 +51,7 @@ class Orders with ChangeNotifier {
                   title: item['title'],
                   quantity: item['quantity'],
                   price: item['price'],
+                  imageUrl: item['imageUrl'],
                 ))
             .toList(),
         dateTime: DateTime.parse(orderedData['dateTime']),
@@ -77,6 +78,7 @@ class Orders with ChangeNotifier {
                     'title': cartProduct.title,
                     'quantity': cartProduct.quantity,
                     'price': cartProduct.price,
+                    'imageUrl': cartProduct.imageUrl,
                   })
               .toList(),
         }),

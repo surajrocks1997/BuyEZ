@@ -43,30 +43,18 @@ class _OrderItemState extends State<OrderItem> {
                 horizontal: 15,
                 vertical: 4,
               ),
-              height: min(widget.order.products.length * 20.0 + 10, 100),
+              height: min(widget.order.products.length * 80.0, 240),
               child: ListView(
                 children: widget.order.products
-                    .map(
-                      (prod) => Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            prod.title,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                    .map((prod) => ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage: NetworkImage(prod.imageUrl),
+                            radius: 40,
                           ),
-                          Text(
-                            '${prod.quantity} x INR ${prod.price}',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.grey,
-                            ),
-                          )
-                        ],
-                      ),
-                    )
+                          title: Text(prod.title),
+                          subtitle: Text('${prod.quantity}x'),
+                          trailing: Text('INR ' + ((prod.price)*(prod.quantity)).toString()),
+                        ))
                     .toList(),
               ),
             ),
