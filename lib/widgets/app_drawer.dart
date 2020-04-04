@@ -9,11 +9,47 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: Column(
+      child: ListView(
+        padding: EdgeInsets.zero,
         children: <Widget>[
-          AppBar(
-            title: Text('Hello Friend'),
-            automaticallyImplyLeading: false,
+          DrawerHeader(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: <Color>[
+                  Color.fromRGBO(156, 39, 176, 1).withOpacity(0.4),
+                  Color.fromRGBO(156, 39, 176, 1).withOpacity(1.0),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: [0, 1],
+              ),
+            ),
+            child: Container(
+              child: Column(
+                children: <Widget>[
+                  Material(
+                    child: CircleAvatar(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      radius: 40,
+                    ),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(40.0),
+                    ),
+                    elevation: 15,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 15),
+                    child: Text(
+                      'Welcome, User',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24.0,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
           Divider(),
           ListTile(
