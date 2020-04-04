@@ -4,8 +4,12 @@ import 'package:provider/provider.dart';
 import '../screens/orders_screen.dart';
 import '../screens/user_products_screen.dart';
 import '../providers/auth.dart';
+import '../screens/profile_screen.dart';
 
 class AppDrawer extends StatelessWidget {
+  // var imageUrl =
+  //     'https://previews.123rf.com/images/jemastock/jemastock1904/jemastock190431374/123116164-man-portrait-faceless-avatar-cartoon-character-vector-illustration-graphic-design.jpg';
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -27,24 +31,25 @@ class AppDrawer extends StatelessWidget {
             child: Container(
               child: Column(
                 children: <Widget>[
-                  Material(
-                    child: CircleAvatar(
-                      backgroundColor: Theme.of(context).primaryColor,
-                      radius: 40,
-                    ),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(40.0),
-                    ),
-                    elevation: 15,
-                  ),
                   Padding(
-                    padding: EdgeInsets.only(top: 15),
-                    child: Text(
-                      'Welcome, User',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24.0,
+                    padding: EdgeInsets.all(8),
+                    child: Material(
+                      child: CircleAvatar(
+                        backgroundColor: Theme.of(context).primaryColor,
+                        // backgroundImage: NetworkImage(imageUrl),
+                        radius: 40,
                       ),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(40.0),
+                      ),
+                      elevation: 15,
+                    ),
+                  ),
+                  Text(
+                    'Welcome, User',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24.0,
                     ),
                   ),
                 ],
@@ -75,6 +80,15 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context)
                   .pushReplacementNamed(UserProductsScreen.routeName);
+            },
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.account_circle),
+            title: Text('Profile'),
+            onTap: () {
+              Navigator.of(context)
+                  .pushReplacementNamed(ProfileScreen.routeName);
             },
           ),
           Divider(),

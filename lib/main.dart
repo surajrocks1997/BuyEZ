@@ -5,6 +5,7 @@ import './providers/auth.dart';
 import './providers/cart.dart';
 import './providers/products.dart';
 import './providers/orders.dart';
+import './providers/profile.dart';
 
 import './screens/products_overview_screen.dart';
 import './screens/cart_screen.dart';
@@ -14,6 +15,7 @@ import './screens/user_products_screen.dart';
 import './screens/edit_product_screen.dart';
 import './screens/auth_screen.dart.dart';
 import './screens/splash_screen.dart.dart';
+import './screens/profile_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -33,6 +35,13 @@ class MyApp extends StatelessWidget {
                 )),
         ChangeNotifierProvider.value(
           value: Cart(),
+        ),
+        ChangeNotifierProxyProvider<Auth, ProfileDetails>(
+          builder: (ctx, auth, profileDetail) => ProfileDetails(
+            profileDetail == null ? null : profileDetail.details,
+            auth.token,
+            auth.userId,
+          ),
         ),
         ChangeNotifierProxyProvider<Auth, Orders>(
             builder: (ctx, auth, previousOrders) => Orders(
@@ -66,6 +75,7 @@ class MyApp extends StatelessWidget {
             OrdersScreen.routeName: (ctx) => OrdersScreen(),
             UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
             EditProductScreen.routeName: (ctx) => EditProductScreen(),
+            ProfileScreen.routeName: (ctx) => ProfileScreen(),
           },
         ),
       ),
