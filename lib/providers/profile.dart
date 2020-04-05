@@ -44,7 +44,7 @@ class ProfileDetails with ChangeNotifier {
 
       loadedData = Profile(
         firstName: extractedData['firstName'],
-        lastName: extractedData['lastname'],
+        lastName: extractedData['lastName'],
         age: extractedData['age'],
         address: extractedData['address'],
       );
@@ -67,9 +67,9 @@ class ProfileDetails with ChangeNotifier {
         body: json.encode(
           {
             'firstName': profile.firstName,
-            'lastname': profile.lastName,
+            'lastName': profile.lastName,
             'age': profile.age,
-            'deliveryAddress': profile.address
+            'address': profile.address
           },
         ),
       );
@@ -89,9 +89,9 @@ class ProfileDetails with ChangeNotifier {
         body: json.encode(
           {
             'firstName': profile.firstName,
-            'lastname': profile.lastName,
+            'lastName': profile.lastName,
             'age': profile.age,
-            'deliveryAddress': profile.address
+            'address': profile.address
           },
         ),
       );

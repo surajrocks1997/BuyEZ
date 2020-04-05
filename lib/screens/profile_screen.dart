@@ -28,19 +28,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     address: '',
   );
 
-  var _isInit = true;
+  
   var _isLoading = false;
 
   @override
   void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (_isInit) {
-      Provider.of<ProfileDetails>(context)
-          .fetchAndSetProfile()
-          .then((response) => {_editedProfile = response});
-      if (_editedProfile == null) {
-        return;
-      }
+    Profile profileData = ModalRoute.of(context).settings.arguments as Profile;
+    if (profileData != null) {
+      _editedProfile = profileData;
+
       _initValue = {
         'firstName': _editedProfile.firstName,
         'lastName': _editedProfile.lastName,
@@ -48,8 +44,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
         'address': _editedProfile.address,
       };
     }
-    _isInit = false;
+    super.didChangeDependencies();
   }
+
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   if (_isInit) {
+  //     Provider.of<ProfileDetails>(context)
+  //         .fetchAndSetProfile()
+  //         .then((response) => {_editedProfile = response});
+  //     if (_editedProfile == null) {
+  //       return;
+  //     }
+  //     _initValue = {
+  //       'firstName': _editedProfile.firstName,
+  //       'lastName': _editedProfile.lastName,
+  //       'age': _editedProfile.age.toString(),
+  //       'address': _editedProfile.address,
+  //     };
+  //   }
+  //   _isInit = false;
+  // }
 
   var imageUrl =
       'https://previews.123rf.com/images/jemastock/jemastock1904/jemastock190431374/123116164-man-portrait-faceless-avatar-cartoon-character-vector-illustration-graphic-design.jpg';
@@ -76,7 +92,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       setState(() {
         _isLoading = false;
       });
-
       Navigator.of(context).popAndPushNamed('/');
     } catch (error) {
       throw error;
@@ -170,6 +185,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       },
                     ),
                   ],
+                  
                 ),
               ),
             ),

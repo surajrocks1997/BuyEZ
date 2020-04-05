@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/profile.dart';
 import '../screens/orders_screen.dart';
 import '../screens/user_products_screen.dart';
 import '../providers/auth.dart';
@@ -86,9 +87,10 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.account_circle),
             title: Text('Profile'),
-            onTap: () {
+            onTap: () async {
+              Profile profileData = await Provider.of<ProfileDetails>(context).fetchAndSetProfile();
               Navigator.of(context)
-                  .pushReplacementNamed(ProfileScreen.routeName);
+                  .pushReplacementNamed(ProfileScreen.routeName, arguments: profileData);
             },
           ),
           Divider(),
