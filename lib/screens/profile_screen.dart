@@ -33,7 +33,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void didChangeDependencies() {
-    Profile profileData = ModalRoute.of(context).settings.arguments as Profile;
+    // Profile profileData = ModalRoute.of(context).settings.arguments as Profile;
+    Profile profileData = Provider.of<ProfileDetails>(context).details;
     if (profileData != null) {
       _editedProfile = profileData;
 
