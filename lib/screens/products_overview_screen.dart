@@ -8,6 +8,7 @@ import '../providers/cart.dart';
 import '../widgets/badge.dart.dart';
 import '../providers/products.dart';
 import '../providers/profile.dart';
+import '../providers/orders.dart';
 
 enum FilterOptions {
   Favorites,
@@ -43,6 +44,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       });
     }
     Provider.of<ProfileDetails>(context).fetchAndSetProfile();
+    Provider.of<Orders>(context, listen: false).fetchAndSetOrder();
     _isInit = false;
     super.didChangeDependencies();
   }

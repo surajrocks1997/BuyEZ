@@ -16,6 +16,7 @@ import './screens/edit_product_screen.dart';
 import './screens/auth_screen.dart.dart';
 import './screens/splash_screen.dart.dart';
 import './screens/profile_screen.dart';
+import './screens/analysis_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -44,11 +45,12 @@ class MyApp extends StatelessWidget {
           ),
         ),
         ChangeNotifierProxyProvider<Auth, Orders>(
-            builder: (ctx, auth, previousOrders) => Orders(
-                  auth.token,
-                  previousOrders == null ? [] : previousOrders.orders,
-                  auth.userId,
-                )),
+          builder: (ctx, auth, previousOrders) => Orders(
+            auth.token,
+            previousOrders == null ? [] : previousOrders.orders,
+            auth.userId,
+          ),
+        ),
       ],
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
@@ -76,6 +78,7 @@ class MyApp extends StatelessWidget {
             UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
             EditProductScreen.routeName: (ctx) => EditProductScreen(),
             ProfileScreen.routeName: (ctx) => ProfileScreen(),
+            AnalysisScreen.routeName: (ctx) => AnalysisScreen(),
           },
         ),
       ),
