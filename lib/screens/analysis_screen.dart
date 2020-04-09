@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:provider/provider.dart';
-
+import 'package:intl/intl.dart';
 
 import '../widgets/app_drawer.dart';
 import '../providers/orders.dart';
@@ -18,6 +18,8 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
 
   List<OrderItem> graphData = [];
   List<GraphValue> graphValue = [];
+  double highestOrderAmount = 0;
+  DateTime highestOrderDate;
 
   @override
   void initState() {
@@ -38,12 +40,21 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
         ),
       },
     );
+    graphValue.forEach(
+      (data) => {
+        if (data.amount >= highestOrderAmount)
+          {
+            highestOrderAmount = data.amount,
+            highestOrderDate = data.dateTime,
+          }
+      },
+    );
     seriesList = _createRandomData();
   }
 
   List<charts.Series<GraphValue, DateTime>> _createRandomData() {
     final orderData = graphValue;
-    print(orderData.toString());
+    // print(orderData.toString());
 
     return [
       charts.Series<GraphValue, DateTime>(
@@ -58,7 +69,8 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
   barChart() {
     return charts.TimeSeriesChart(
       seriesList,
-      animate: false,
+      animate: true,
+      animationDuration: Duration(seconds: 1),
       dateTimeFactory: const charts.LocalDateTimeFactory(),
     );
   }
@@ -70,9 +82,54 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
         title: Text('Analysis'),
       ),
       drawer: AppDrawer(),
-      body: Container(
-        padding: EdgeInsets.all(20),
-        child: barChart(),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.all(20),
+          child: Column(
+            children: <Widget>[
+              Divider(),
+              Container(
+                height: 350,
+                child: barChart(),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 25),
+                child: Text(
+                  'Highest you have spent on single order is',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
+              Column(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(top: 8),
+                    child: Text(
+                      'INR $highestOrderAmount',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Padding(padding: EdgeInsets.only(top: 8), child: Text('on')),
+                  Padding(
+                    padding: EdgeInsets.only(top: 8),
+                    child: Text(
+                      '${DateFormat('dd/MM/yyyy hh:mm').format(highestOrderDate)}',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Divider(),
+                ],
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
