@@ -185,7 +185,16 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
                               fontSize: 14,
                             ),
                           ),
-                          Text(
+                          _percentageChange.toStringAsFixed(2) == 'Infinity' ? Text(
+                            'NO ORDERS',
+                            style: TextStyle(
+                              color: (_percentageChange < 0)
+                                  ? Colors.green
+                                  : Colors.red,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ) : Text(
                             '${_percentageChange.toStringAsFixed(2)}%',
                             style: TextStyle(
                               color: (_percentageChange < 0)
