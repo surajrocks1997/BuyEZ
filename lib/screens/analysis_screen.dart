@@ -40,8 +40,8 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
 
     final List<OrderItem> graphData =
         Provider.of<Orders>(context, listen: false).orders;
-    graphData
-        .forEach((order) => print('${order.amount} and ${order.dateTime}'));
+    // graphData
+    //     .forEach((order) => print('${order.amount} and ${order.dateTime}'));
     graphData.forEach(
       (data) => {
         graphValue.add(
@@ -81,10 +81,10 @@ class _AnalysisScreenState extends State<AnalysisScreen> {
         ((_currentMonthOrderAmount - _prevMonthOrderAmount) * 100) /
             (_prevMonthOrderAmount);
 
-    print('Percentage Change: ${_percentageChange.toStringAsFixed(2)}');
-    print('Total Order Amount: $_totalOrderAmount');
-    print('Prev Month Order Total: $_prevMonthOrderAmount');
-    print('Current Month Order Total: $_currentMonthOrderAmount');
+    // print('Percentage Change: ${_percentageChange.toStringAsFixed(2)}');
+    // print('Total Order Amount: $_totalOrderAmount');
+    // print('Prev Month Order Total: $_prevMonthOrderAmount');
+    // print('Current Month Order Total: $_currentMonthOrderAmount');
 
     seriesList = _createRandomData();
   }
