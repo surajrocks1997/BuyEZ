@@ -38,7 +38,9 @@ class _OrderItemState extends State<OrderItem> {
             ),
           ),
           if (_expanded)
-            Container(
+            AnimatedContainer(
+              curve: Curves.easeIn,
+              duration: Duration(milliseconds: 800),
               padding: EdgeInsets.symmetric(
                 horizontal: 15,
                 vertical: 4,
